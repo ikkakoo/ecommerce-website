@@ -1,11 +1,14 @@
 from itertools import product
+from math import prod
 from django.shortcuts import render
 from django.http import JsonResponse
-from . import products
+
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
+from .products import products
 
+@api_view(['GET'])
 def get_routes(request):
     routes = [
         'api/products/',
@@ -23,8 +26,21 @@ def get_routes(request):
         'api/products/top',
     ]
 
-    return JsonResponse(routes, safe=False)
+    return Response(routes)
 
 
+@api_view(['GET'])
 def get_products(request):
-    return JsonResponse(products, safe=False)
+    return Response(products)
+
+
+@api_view(['GET'])
+def get_product(request, pk):
+    product = None
+
+    for i in products:
+        if i['id'] == pk:
+            product = i
+            break
+            
+    return Response(product)            
