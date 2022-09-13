@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import {
   Box,
@@ -14,11 +14,24 @@ import {
 } from '@chakra-ui/react';
 import Rating from '../components/Rating';
 import { FaAngleLeft, FaCartPlus } from 'react-icons/fa';
-import products from '../products';
+import axios from 'axios'
 
 const ProductPage = () => {
+  const [product, setProduct] = useState([])
+
   const { id } = useParams();
-  const product = products.find(p => p.id == id);
+
+  console.log(id);
+
+  useEffect(() => {
+    const getProduct = async () => {
+      const { data } = await axios.get(`/api/products/${id}`)
+      setProduct(data);
+    }
+
+    getProduct();
+  }, [])
+  
 
   return (
     <Container maxW={'container.xl'} p={10}>
