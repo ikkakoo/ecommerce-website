@@ -1,8 +1,3 @@
-from itertools import product
-from math import prod
-from django.shortcuts import render
-from django.http import JsonResponse
-
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
