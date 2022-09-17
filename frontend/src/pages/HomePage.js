@@ -1,29 +1,35 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
-import { Flex, Box, Heading, Text, Container } from '@chakra-ui/react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Flex, Heading } from '@chakra-ui/react';
 import Product from '../components/Product';
-import axios from 'axios';
+import Loader from '../components/Loader';
+import { listProducts } from '../actions/productActions';
+import Message from '../components/Message';
 
 const HomePage = () => {
-  const [products, setProducts] = useState([]);
+  const dispatch = useDispatch();
+  const productList = useSelector(state => state.productList);
+  const { error, loading, products } = productList;
 
   useEffect(() => {
-    const getProducts = async () => {
-      const { data } = await axios.get('api/products/')
-      setProducts(data)
-    }
-
-    getProducts();
-  }, [])
+    dispatch(listProducts());
+  }, [dispatch]);
 
   return (
     <>
       <Heading mb={5}>Latest Products</Heading>
-      <Flex gap={5}>
-        {products.map(product => (
-          <Product product={product} key={product.id} />
-        ))}
-      </Flex>
+      {loading ? (
+        <Loader/>
+      ) : error ? (
+        <Message status={'error'} error={error} title='Error' />
+      ) : (
+        <Flex gap={5}>
+          {products.map(product => (
+            <Product product={product} key={product.id} />
+          ))}
+        </Flex>
+      )}
     </>
   );
 };
