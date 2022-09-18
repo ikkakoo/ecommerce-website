@@ -14,8 +14,9 @@ function App() {
           <Header />
           <Routes>
             <Route path="/" element={<HomePage />} exact />
-            <Route path="product/:id" element={<ProductPage />} />
-            <Route path="cart/:id?" element={<CartPage />} />
+            <Route path="/product/:id" element={<ProductPage />} />
+            <Route path='/cart' element={<CartPage />} />
+            <Route path="/cart/:id" element={<CartPage />} />
           </Routes>
         </main>
         <Footer />

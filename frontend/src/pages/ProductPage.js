@@ -49,7 +49,7 @@ const ProductPage = () => {
       {loading ? (
         <Loader />
       ) : error ? (
-        <Message status={'error'} error={error} title="Error" />
+        <Message status={'error'} description={error} />
       ) : (
         <SimpleGrid columns={3} spacing={'2em'}>
           <Box>
