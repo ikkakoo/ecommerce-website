@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
-import { login } from '../actions/userActions';
+import { register } from '../actions/userActions';
 import FormWrapper from '../components/FormWrapper';
 
 import {
@@ -13,22 +13,25 @@ import {
   VStack,
   Heading,
   Text,
-  Button,
   Flex,
+  Button,
 } from '@chakra-ui/react';
 
-const LoginPage = () => {
+const RegisterPage = () => {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [message, setMessage] = useState('');
 
   const dispatch = useDispatch();
 
   const location = useLocation().search;
   const redirect = location ? Number(location.split('=')[1]) : '/';
 
-  const userLogin = useSelector(state => state.userLogin);
+  const userRegister = useSelector(state => state.userRegister);
 
-  const { error, loading, userInfo } = userLogin;
+  const { error, loading, userInfo } = userRegister;
 
   const navigate = useNavigate();
 
@@ -40,7 +43,12 @@ const LoginPage = () => {
 
   const submitHandler = e => {
     e.preventDefault();
-    dispatch(login(email, password));
+
+    if (password != confirmPassword) {
+      setMessage('Passwords Do Not Match');
+    } else {
+      dispatch(register(name, email, password));
+    }
   };
 
   return (
@@ -49,12 +57,13 @@ const LoginPage = () => {
         <VStack spacing={3} alignItems="flex-start">
           <Heading size="2xl">Sign In</Heading>
           <Text>
-            Don't have an account?{' '}
-            <Link to={redirect ? `/register?redirect${redirect}` : '/register'}>
-              Sign Up here
+            Already have an account?
+            <Link to={redirect ? `/login?redirect${redirect}` : '/login'}>
+              Sign in here
             </Link>
           </Text>
         </VStack>
+        {message && <Message status={'error'} description={message} />}
         {error && <Message status={'error'} description={error} />}
         {loading && <Loader />}
         <Flex
@@ -64,17 +73,30 @@ const LoginPage = () => {
           direction="column"
           gap={2}
         >
-          <FormLabel>Email</FormLabel>
+          <FormLabel>Name</FormLabel>
           <Input
-            type="email"
-            placeholder="Enter Email"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
+            required
+            type="text"
+            placeholder="Enter Name"
+            value={name}
+            onChange={e => setName(e.target.value)}
           />
+
+          <FormControl>
+            <FormLabel>Email</FormLabel>
+            <Input
+              required
+              type="email"
+              placeholder="Enter Email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+            />
+          </FormControl>
 
           <FormControl>
             <FormLabel>Password</FormLabel>
             <Input
+              required
               type="password"
               placeholder="Enter Password"
               value={password}
@@ -82,8 +104,19 @@ const LoginPage = () => {
             />
           </FormControl>
 
+          <FormControl>
+            <FormLabel>Confirm Password</FormLabel>
+            <Input
+              required
+              type="password"
+              placeholder="Confirm Password"
+              value={confirmPassword}
+              onChange={e => setConfirmPassword(e.target.value)}
+            />
+          </FormControl>
+
           <Button type="submit" size="lg" w="full">
-            Log In
+            Sign Up
           </Button>
         </Flex>
       </VStack>
@@ -91,4 +124,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default RegisterPage;
