@@ -23,7 +23,7 @@ function App() {
             <Route path="/register" element={<RegisterPage />} />
           </Routes>
         </main>
-        <Footer />
+        {/* <Footer /> */}
       </>
     </Router>
   );

@@ -13,6 +13,8 @@ class Product(models.Model):
     brand = models.CharField(max_length=255, null=True, blank=True)
     category = models.CharField(max_length=255, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
+    overview = models.CharField(max_length=500, null=True, blank=True)
+    specs = models.CharField(max_length=500, null=True, blank=True)
     rating = models.DecimalField(max_digits=7, decimal_places=3)
     num_reviews = models.IntegerField(null=True, blank=True, default=0)
     price = models.DecimalField(max_digits=7, decimal_places=2)
